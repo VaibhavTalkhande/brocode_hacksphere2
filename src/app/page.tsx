@@ -2,25 +2,46 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Code, Play, Braces, Zap, PenTool, MessageSquare } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { TextRevealCard } from "@/components/ui/text-reveal" // Removed unused TextReveal
+import SwipeButton from "@/components/animata/button/swipe-button" // Add this import
+
+// Highlight text component
+const HighlightedText = ({ children }: { children: React.ReactNode }) => (
+  <span className="relative">
+    <span className="relative z-10">{children}</span>
+    <motion.span
+      initial={{ width: "0%" }}
+      whileInView={{ width: "100%" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="absolute bottom-0 left-0 h-[10px] bg-purple-400/30 -z-10"
+    />
+  </span>
+)
+
+// Grid background component
+const GridBackground = () => (
+  <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:60px_60px] motion-safe:animate-grid-fade pointer-events-none" />
+)
 
 const VideoThumbnail = () => {
   const [isPlaying, setIsPlaying] = useState(false)
-  // Extract just the file ID from the Google Drive URL
   const videoId = "1htGgH5MfgTQX5l9ujcu0MJizIhQ-pYHr"
+  // Use the proper embed URL format
   const videoUrl = `https://drive.google.com/file/d/${videoId}/preview`
-
+  
   return (
-    <div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden">
+    <div className="relative w-full aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-xl">
       {!isPlaying ? (
         <div
-          className="cursor-pointer w-full h-full"
+          className="cursor-pointer w-full h-full group"
           onClick={() => setIsPlaying(true)}
         >
-          {/* Placeholder/Custom Thumbnail */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-blue-600/10">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-xl">
+          {/* Gradient Background as Placeholder */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-blue-600/20">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+              <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 shadow-xl transform group-hover:scale-110 transition-transform mb-4">
                 <svg
                   className="w-12 h-12 text-purple-600"
                   fill="currentColor"
@@ -29,35 +50,55 @@ const VideoThumbnail = () => {
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
+              <h3 className="text-xl font-semibold text-white text-shadow">Algorithm Visualization Demo</h3>
+              <p className="text-white/80 text-shadow-sm">Click to play the video</p>
             </div>
           </div>
         </div>
       ) : (
-        <iframe
-          className="w-full h-full absolute inset-0"
-          src={videoUrl}
-          title="Algorithm Visualization"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-          loading="lazy"
-        />
+        <div className="relative w-full h-full">
+          <iframe
+            className="w-full h-full absolute inset-0"
+            src={videoUrl}
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+            loading="lazy"
+          />
+          <button 
+            onClick={() => setIsPlaying(false)}
+            className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       )}
     </div>
   )
 }
 
 export default function Home() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted) {
+    return null // or a loading spinner
+  }
+
   return (
     <main className="min-h-screen">
       {/* Navigation - with glassmorphism */}
       <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-purple-500/20 shadow-[0_0_15px_rgba(124,58,237,0.2)]">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
           <div className="flex items-center">
-            <Link
-              href="/"
-              className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600"
-            >
-              Algoviz.
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
+                Algoviz.
+              </span>
             </Link>
           </div>
           <div className="hidden md:flex items-center space-x-8">
@@ -104,69 +145,138 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-500 py-16 md:py-24">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 max-w-4xl mx-auto">
-            Visualize algorithms.
+      <section className="relative bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-500 py-16 md:py-24 overflow-hidden">
+        <GridBackground />
+        <div className="container mx-auto px-6 text-center relative">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-6xl font-bold text-white mb-4 max-w-4xl mx-auto"
+          >
+            <HighlightedText>Visualize algorithms.</HighlightedText>
             <br />
-            Understand DSA effortlessly.
-          </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+            <HighlightedText>Understand DSA effortlessly.</HighlightedText>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto"
+          >
             With Algoviz, you can visualize data structures and algorithms in real-time with{" "}
-            <span className="underline">AI-powered optimization suggestions</span> to enhance your understanding.
-          </p>
-          <button className="bg-white text-purple-600 font-medium px-8 py-3 rounded-md shadow-lg hover:shadow-xl transition duration-300">
-            Try it now
-          </button>
+            <span className="relative inline-block">
+              <span className="relative z-10">AI-powered optimization suggestions</span>
+              <motion.span
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="absolute bottom-0 left-0 h-[2px] bg-white"
+              />
+            </span>{" "}
+            to enhance your understanding.
+          </motion.p>
+          <SwipeButton 
+            firstText="Try It Now" 
+            secondText="Get " 
+            firstClass="bg-purple-600 text-white"
+            secondClass="bg-indigo-700 text-white"
+            className="mt-8 mx-auto"
+          />
 
-          {/* <div className="flex justify-center mt-12 space-x-2">
-            {[1, 2, 3, 4, 5, 6].map((dot, index) => (
-              <div key={index} className={`h-2 w-2 rounded-full ${index === 0 ? "bg-white" : "bg-white/50"}`}></div>
-            ))}
-          </div> */}
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-green text-sm tracking-widest mt-8 font-large font-bold"
+          >
+            USED BY THOUSANDS OF DEVELOPERS
+          </motion.p>
 
-          <p className="text-green text-sm tracking-widest mt-8 font-large font-bold">USED BY THOUSANDS OF DEVELOPERS</p>
-
-          <div className="mt-16">
-            <p className="text-white/80 text-sm tracking-wider mb-8">TRUSTED BY THESE INNOVATIVE COMPANIES</p>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mt-16"
+          >
+            <TextRevealCard className="mb-8">
+              <p className="text-white/80 text-sm tracking-wider">
+                TRUSTED BY THESE INNOVATIVE COMPANIES
+              </p>
+            </TextRevealCard>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
-                alt="Company 1"
-                width={120}
-                height={40}
-                className="w-24 h-24 object-contain"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
-                alt="Company 2"
-                width={120}
-                height={40}
-                className="w-24 h-24 object-contain"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
-                alt="Company 3"
-                width={120}
-                height={40}
-                className="w-24 h-24 object-contain"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg"
-                alt="Company 4"
-                width={120}
-                height={40}
-                className="w-24 h-24 object-contain"
-              />
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-                alt="Company 5"
-                width={120}
-                height={40}
-                className="w-24 h-24 object-contain"
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"
+                  alt="Meta"
+                  width={120}
+                  height={40}
+                  className="w-24 h-24 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+                  alt="Microsoft"
+                  width={120}
+                  height={40}
+                  className="w-24 h-24 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+                  alt="Apple"
+                  width={120}
+                  height={40}
+                  className="w-24 h-24 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg"
+                  alt="Tesla"
+                  width={120}
+                  height={40}
+                  className="w-24 h-24 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <Image
+                  src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+                  alt="Amazon"
+                  width={120}
+                  height={40}
+                  className="w-24 h-24 object-contain opacity-90 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -271,72 +381,66 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-16 md:py-24">
+      {/* Enhanced Testimonials Section */}
+      <section id="testimonials" className="py-16 md:py-24 overflow-hidden">
         <div className="container mx-auto px-6">
+          <TextRevealCard className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              <HighlightedText>Loved by developers worldwide</HighlightedText>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              See what our community has to say about their experience with Algoviz
+            </p>
+          </TextRevealCard>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <Image
-                  src="/placeholder.svg?height=60&width=60"
-                  alt="User"
-                  width={60}
-                  height={60}
-                  className="rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-bold text-gray-800">Alex Johnson</h4>
-                  <p className="text-gray-600 text-sm">Senior Developer, TechCorp</p>
+            {[
+              {
+                name: "Alex Johnson",
+                role: "Senior Developer, TechCorp",
+                quote: "Yes they do beautiful visualizations. Yes they have clean code. But the thing that makes them so special is how easy they are to work with. Can you have it all? Apparently with Algoviz."
+              },
+              {
+                name: "Sarah Chen",
+                role: "CS Professor, Tech University",
+                quote: "Algoviz continues to deliver clean, elegant visualizations—perfectly executed and always intuitive. It's transformed how I teach algorithms to my students."
+              },
+              {
+                name: "Michael Torres",
+                role: "Bootcamp Instructor, CodeAcademy",
+                quote: "The algorithm visualizations you designed are perfect. Our latest courses have our highest completion rates ever and we're seeing a 20% understanding rate increase!"
+              },
+              {
+                name: "Emma Wilson",
+                role: "Lead Developer, StartupX",
+                quote: "The AI suggestions have helped us optimize our algorithms significantly. It's like having a senior developer reviewing your code in real-time."
+              },
+              {
+                name: "David Park",
+                role: "Software Architect, TechGiant",
+                quote: "The visualization capabilities are unmatched. We use Algoviz for both teaching new hires and optimizing production code."
+              },
+              {
+                name: "Lisa Rodriguez",
+                role: "Tech Lead, InnovateCo",
+                quote: "Finally, a tool that makes complex algorithms easy to understand. The real-time visualization has become an essential part of our development process."
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+              >
+                <p className="text-gray-700 mb-6 text-lg italic">{testimonial.quote}</p>
+                <div className="border-t border-gray-100 pt-4">
+                  <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
+                  <p className="text-purple-600 text-sm">{testimonial.role}</p>
                 </div>
-              </div>
-              <p className="text-gray-700">
-                "Yes they do beautiful visualizations. Yes they have clean code. But the thing that makes them so
-                special is how easy they are to work with. Can you have it all? Apparently with Algoviz."
-              </p>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <Image
-                  src="/placeholder.svg?height=60&width=60"
-                  alt="User"
-                  width={60}
-                  height={60}
-                  className="rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-bold text-gray-800">Sarah Chen</h4>
-                  <p className="text-gray-600 text-sm">CS Professor, Tech University</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "Algoviz continues to deliver clean, elegant visualizations—perfectly executed and always intuitive.
-                It's transformed how I teach algorithms to my students."
-              </p>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <Image
-                  src="/placeholder.svg?height=60&width=60"
-                  alt="User"
-                  width={60}
-                  height={60}
-                  className="rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-bold text-gray-800">Michael Torres</h4>
-                  <p className="text-gray-600 text-sm">Bootcamp Instructor, CodeAcademy</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "The algorithm visualizations you designed are perfect. Our latest courses have our highest completion
-                rates ever and we're seeing a 20% understanding rate increase!"
-              </p>
-            </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -356,8 +460,14 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Case Study 1 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-64">
-                <Image src="/placeholder.svg?height=300&width=500" alt="Case Study" fill className="object-cover" />
+              <div className="relative h-64 bg-gradient-to-br from-purple-500/10 to-blue-500/10">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-purple-600 text-6xl opacity-20">
+                    <svg className="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                </div>
                 <div className="absolute bottom-0 left-0 bg-purple-600 text-white px-4 py-2 text-sm font-medium">
                   CASE STUDY
                 </div>
@@ -375,8 +485,14 @@ export default function Home() {
 
             {/* Case Study 2 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-64">
-                <Image src="/placeholder.svg?height=300&width=500" alt="Case Study" fill className="object-cover" />
+              <div className="relative h-64 bg-gradient-to-br from-blue-500/10 to-indigo-500/10">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-blue-600 text-6xl opacity-20">
+                    <svg className="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                    </svg>
+                  </div>
+                </div>
                 <div className="absolute bottom-0 left-0 bg-blue-600 text-white px-4 py-2 text-sm font-medium">
                   CASE STUDY
                 </div>
@@ -384,8 +500,7 @@ export default function Home() {
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">DevTeam Solutions</h3>
                 <p className="text-gray-600 mb-4">
-                  How a development team used Algoviz to optimize their sorting algorithms and improved performance by
-                  30%.
+                  How a development team used Algoviz to optimize their sorting algorithms and improved performance by 30%.
                 </p>
                 <Link href="#" className="text-purple-600 font-medium hover:underline">
                   Read more →
@@ -395,8 +510,14 @@ export default function Home() {
 
             {/* Case Study 3 */}
             <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-64">
-                <Image src="/placeholder.svg?height=300&width=500" alt="Case Study" fill className="object-cover" />
+              <div className="relative h-64 bg-gradient-to-br from-indigo-500/10 to-purple-500/10">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-indigo-600 text-6xl opacity-20">
+                    <svg className="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                </div>
                 <div className="absolute bottom-0 left-0 bg-indigo-600 text-white px-4 py-2 text-sm font-medium">
                   CASE STUDY
                 </div>
@@ -404,8 +525,7 @@ export default function Home() {
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-2">CodeCamp Bootcamp</h3>
                 <p className="text-gray-600 mb-4">
-                  How a coding bootcamp integrated Algoviz into their curriculum and saw student satisfaction increase
-                  by 45%.
+                  How a coding bootcamp integrated Algoviz into their curriculum and saw student satisfaction increase by 45%.
                 </p>
                 <Link href="#" className="text-purple-600 font-medium hover:underline">
                   Read more →
@@ -487,11 +607,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-6">
+      {/* Enhanced Footer */}
+      <footer className="relative bg-gray-900 text-white py-12 overflow-hidden">
+        <GridBackground />
+        <div className="container mx-auto px-6 relative">
           <div className="grid md:grid-cols-4 gap-8">
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               <Link
                 href="/"
                 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400"
@@ -499,7 +625,7 @@ export default function Home() {
                 Algoviz.
               </Link>
               <p className="mt-4 text-gray-400">Visualize algorithms. Understand DSA effortlessly.</p>
-            </div>
+            </motion.div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Product</h3>
               <ul className="space-y-2">

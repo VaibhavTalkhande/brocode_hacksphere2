@@ -104,16 +104,50 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        'grid-fade': {
+          '0%, 100%': { opacity: 0.8 },
+          '50%': { opacity: 0.4 },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'grid-fade': 'grid-fade 15s ease-in-out infinite',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'grid-white': 'linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+      },
+      textShadow: {
+        DEFAULT: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        sm: '0 1px 2px rgba(0, 0, 0, 0.1)',
+        md: '0 4px 8px rgba(0, 0, 0, 0.12)',
+        lg: '0 8px 16px rgba(0, 0, 0, 0.15)',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.text-shadow': {
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        },
+        '.text-shadow-sm': {
+          textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+        },
+        '.text-shadow-md': {
+          textShadow: '0 4px 8px rgba(0, 0, 0, 0.12)',
+        },
+        '.text-shadow-lg': {
+          textShadow: '0 8px 16px rgba(0, 0, 0, 0.15)',
+        },
+        '.text-shadow-none': {
+          textShadow: 'none',
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
 };

@@ -291,8 +291,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-700">
-                "Yes they do beautiful visualizations. Yes they have clean code. But the thing that makes them so
-                special is how easy they are to work with. Can you have it all? Apparently with Algoviz."
+                &quot;Yes they do beautiful visualizations. Yes they have clean code. But the thing that makes them so
+                special is how easy they are to work with. Can you have it all? Apparently with Algoviz.&quot;
               </p>
             </div>
 
@@ -312,8 +312,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-700">
-                "Algoviz continues to deliver clean, elegant visualizations—perfectly executed and always intuitive.
-                It's transformed how I teach algorithms to my students."
+                &quot;Algoviz continues to deliver clean, elegant visualizations&mdash;perfectly executed and always intuitive.
+                It&apos;s transformed how I teach algorithms to my students.&quot;
               </p>
             </div>
 
@@ -333,8 +333,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-700">
-                "The algorithm visualizations you designed are perfect. Our latest courses have our highest completion
-                rates ever and we're seeing a 20% understanding rate increase!"
+                &quot;The algorithm visualizations you designed are perfect. Our latest courses have our highest completion
+                rates ever and we&apos;re seeing a 20% understanding rate increase!&quot;
               </p>
             </div>
           </div>

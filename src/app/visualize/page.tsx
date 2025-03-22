@@ -23,14 +23,14 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-white">
-     
-
-      <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <div className="bg-white p-6 rounded-lg shadow-md border">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
               <h2 className="text-lg font-semibold mb-4 text-black">Algorithm Visualization</h2>
-              <VisualizationCanvas />
+              <div className="bg-white">
+                <VisualizationCanvas />
+              </div>
               <div className="mt-4">
                 <VisualizationControls />
               </div>
@@ -38,8 +38,10 @@ export default function Page() {
           </div>
           
           <div>
-            <div className="bg-white p-6 rounded-lg shadow-md text-black">
-              <CodeEditor />
+            <div className="w-full bg-white p-6 rounded-lg shadow-md border border-gray-200">
+              <div className="text-black">
+                <CodeEditor />
+              </div>
             </div>
           </div>
         </div>

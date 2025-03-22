@@ -160,7 +160,7 @@ export const CodeEditor: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       <div className="flex justify-between items-center">
         <div className="space-y-2">
           <h3 className="text-lg font-semibold text-gray-100">Code Editor</h3>

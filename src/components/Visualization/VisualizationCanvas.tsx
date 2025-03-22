@@ -65,7 +65,7 @@ export const VisualizationCanvas: React.FC = () => {
       
       xAxis.call(d3.axisBottom(x))
         .selectAll('text')
-        .attr('class', 'text-sm fill-gray-400')
+        .attr('class', 'text-sm fill-gray-600')
         .style('text-anchor', 'middle');
 
       // Add Y axis with animation
@@ -74,7 +74,7 @@ export const VisualizationCanvas: React.FC = () => {
       
       yAxis.call(d3.axisLeft(y))
         .selectAll('text')
-        .attr('class', 'text-sm fill-gray-400');
+        .attr('class', 'text-sm fill-gray-600');
 
       // Add bars with animation
       const bars = g.selectAll('rect')
@@ -101,7 +101,7 @@ export const VisualizationCanvas: React.FC = () => {
         .data(currentData)
         .enter()
         .append('text')
-        .attr('class', 'value-label text-sm fill-gray-300')
+        .attr('class', 'value-label text-sm fill-black')
         .attr('x', d => (x(d.index.toString()) || 0) + x.bandwidth() / 2)
         .attr('y', height)
         .attr('text-anchor', 'middle')
@@ -115,14 +115,14 @@ export const VisualizationCanvas: React.FC = () => {
 
       // Add axis labels
       g.append('text')
-        .attr('class', 'fill-gray-400 text-sm')
+        .attr('class', 'fill-black text-sm')
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
         .attr('y', height + 40)
         .text('Index');
 
       g.append('text')
-        .attr('class', 'fill-gray-400 text-sm')
+        .attr('class', 'fill-black text-sm')
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .attr('x', -height / 2)
@@ -141,35 +141,32 @@ export const VisualizationCanvas: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div ref={containerRef} className="relative w-full h-[400px] bg-gray-900 rounded-lg shadow-md overflow-hidden p-4">
+      <div ref={containerRef} className="relative w-full h-[400px] bg-gray-50 rounded-lg shadow-md overflow-hidden p-4 border border-gray-200">
         {error ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-red-400">{error}</p>
+            <p className="text-red-600">{error}</p>
           </div>
         ) : data[currentStep]?.length > 0 ? (
           <svg ref={svgRef} className="w-full h-full" />
         ) : (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">No data to visualize. Run the code to see the visualization.</p>
+            <p className="text-gray-600">No data to visualize. Run the code to see the visualization.</p>
           </div>
         )}
       </div>
       
-      <div className="bg-gray-900 p-4 rounded-lg shadow-md">
-        <h3 className="font-medium mb-2 text-gray-200">Current State:</h3>
+      <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
+        <h3 className="font-medium mb-2 text-black">Current State:</h3>
         <div className="grid grid-cols-10 gap-2">
           {data[currentStep]?.map((value, index) => (
             <div
               key={index}
-              className="flex items-center justify-center p-2 bg-gray-800 rounded text-gray-200"
-              style={{
-                background: `linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)`,
-              }}
+              className="flex items-center justify-center p-2 bg-gray-50 rounded text-black border border-gray-200"
             >
               {value}
             </div>
           )) || (
-            <div className="col-span-10 text-center text-gray-400">
+            <div className="col-span-10 text-center text-gray-600">
               No data available
             </div>
           )}

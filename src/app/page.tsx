@@ -91,59 +91,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* Navigation - with glassmorphism */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 border-b border-purple-500/20 shadow-[0_0_15px_rgba(124,58,237,0.2)]">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">
-                Algoviz.
-              </span>
-            </Link>
-          </div>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="#features"
-              className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
-            >
-              How It Works
-            </Link>
-            <Link
-              href="#case-studies"
-              className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
-            >
-              Case Studies
-            </Link>
-            <Link
-              href="#testimonials"
-              className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
-            >
-              Testimonials
-            </Link>
-            <Link href="#faq" className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors">
-              FAQ
-            </Link>
-          </div>
-          <button className="md:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-500 py-16 md:py-24 overflow-hidden">
         <GridBackground />
@@ -165,33 +112,21 @@ export default function Home() {
             className="text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto"
           >
             With Algoviz, you can visualize data structures and algorithms in real-time with{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">AI-powered optimization suggestions</span>
-              <motion.span
-                initial={{ width: 0 }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="absolute bottom-0 left-0 h-[2px] bg-white"
-              />
-            </span>{" "}
-            to enhance your understanding.
+            <span className="underline">AI-powered optimization suggestions</span> to enhance your understanding.
           </motion.p>
-          <SwipeButton 
-            firstText="Try It Now" 
-            secondText="Get " 
-            firstClass="bg-purple-600 text-white"
-            secondClass="bg-indigo-700 text-white"
-            className="mt-8 mx-auto"
-          />
+          <Link href="/signup">
+            <button className="bg-white text-purple-600 font-medium px-8 py-3 rounded-md shadow-lg hover:shadow-xl transition duration-300">
+              Get Started
+            </button>
+          </Link>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-green text-sm tracking-widest mt-8 font-large font-bold"
-          >
-            USED BY THOUSANDS OF DEVELOPERS
-          </motion.p>
+          {/* <div className="flex justify-center mt-12 space-x-2">
+            {[1, 2, 3, 4, 5, 6].map((dot, index) => (
+              <div key={index} className={`h-2 w-2 rounded-full ${index === 0 ? "bg-white" : "bg-white/50"}`}></div>
+            ))}
+          </div> */}
+
+          <p className="text-green text-sm tracking-widest mt-8 font-large font-bold">USED BY THOUSANDS OF DEVELOPERS</p>
 
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -297,9 +232,11 @@ export default function Home() {
                 algorithm visualization, multiple language support, and AI-powered optimization suggestions for your
                 code.
               </p>
-              <button className="bg-blue-600 text-white font-medium px-8 py-3 rounded-md shadow-lg hover:bg-blue-700 transition duration-300">
-                How it works
-              </button>
+              <Link href="/dashboard">
+                <button className="bg-blue-600 text-white font-medium px-8 py-3 rounded-md shadow-lg hover:bg-blue-700 transition duration-300">
+                  Start Visualizing
+                </button>
+              </Link>
             </div>
             <div className="relative">
               <VideoThumbnail />
@@ -329,9 +266,11 @@ export default function Home() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-8 max-w-3xl mx-auto">
             Powerful visualization. Intuitive interface. AI-powered suggestions.
           </h2>
-          <button className="bg-blue-600 text-white font-medium px-8 py-3 rounded-md shadow-lg hover:bg-blue-700 transition duration-300 mb-16">
-            Start visualizing
-          </button>
+          <Link href="/signup">
+            <button className="bg-blue-600 text-white font-medium px-8 py-3 rounded-md shadow-lg hover:bg-blue-700 transition duration-300 mb-16">
+              Create Free Account
+            </button>
+          </Link>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Benefit 1 */}
@@ -434,7 +373,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
               >
-                <p className="text-gray-700 mb-6 text-lg italic">{testimonial.quote}</p>
+                <p className="text-gray-700 mb-6 text-lg italic">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div className="border-t border-gray-100 pt-4">
                   <h4 className="font-bold text-gray-800">{testimonial.name}</h4>
                   <p className="text-purple-600 text-sm">{testimonial.role}</p>
@@ -593,17 +532,26 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-purple-600 via-blue-500 to-indigo-500">
+      <section className="py-16 md:py-24 bg-gradient-to-r from-purple-600 to-blue-600">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 max-w-3xl mx-auto">
-            Ready to visualize your algorithms?
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+            Ready to start visualizing algorithms?
           </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of developers who are using Algoviz to better understand and optimize their algorithms.
+          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+            Join thousands of developers who are already using Algoviz to master data structures and algorithms.
           </p>
-          <button className="bg-white text-purple-600 font-medium px-8 py-3 rounded-md shadow-lg hover:shadow-xl transition duration-300">
-            Get started for free
-          </button>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/signup">
+              <button className="bg-white text-purple-600 font-medium px-8 py-3 rounded-md shadow-lg hover:shadow-xl transition duration-300">
+                Create Free Account
+              </button>
+            </Link>
+            <Link href="/login">
+              <button className="bg-transparent border-2 border-white text-white font-medium px-8 py-3 rounded-md hover:bg-white/10 transition duration-300">
+                Sign In
+              </button>
+            </Link>
+          </div>
         </div>
       </section>
 
